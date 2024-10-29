@@ -49,7 +49,11 @@ public class Player {
             GroupMessageHandler.toGroup(playerTurn);
             // 从队列中获取决策
             String operation = decisionQueue.poll(150, TimeUnit.SECONDS);// 设置超时时间
-            return operation;
+            if(operation!=null){
+                return operation;
+            }else {
+                return "stand";
+            }
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
             System.err.println("Interrupted while waiting for client's decision.");
