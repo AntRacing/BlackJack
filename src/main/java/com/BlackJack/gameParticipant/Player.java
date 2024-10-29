@@ -35,18 +35,21 @@ public class Player {
 //        return "stay";//测试就先让它无脑停牌
 //    }
     public String getDecision() {
-        JSONObject playerTurn = Obj2Json.playerTrunMsg(this);
+
         // 请求客户端决策，并等待响应
-        channel.writeAndFlush(Result.success(playerTurn)).addListener((ChannelFutureListener) future -> {
-            if (!future.isSuccess()) {
-                System.err.println("Failed to send the request to the client.");
-                System.err.println(future.cause().getMessage()); // 输出异常信息
-            }
-        });
+//        channel.writeAndFlush(Result.success(playerTurn)).addListener((ChannelFutureListener) future -> {
+//            if (!future.isSuccess()) {
+//                System.err.println("Failed to send the request to the client.");
+//                System.err.println(future.cause().getMessage()); // 输出异常信息
+//            }
+//        });
 
         try {
+            JSONObject playerTurn = Obj2Json.playerTrunMsg(this);
+            GroupMessageHandler.toGroup(playerTurn);
             // 从队列中获取决策
-            return decisionQueue.poll(50, TimeUnit.SECONDS); // 设置超时时间
+            String operation = decisionQueue.poll(150, TimeUnit.SECONDS);// 设置超时时间
+            return operation;
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
             System.err.println("Interrupted while waiting for client's decision.");
@@ -54,7 +57,7 @@ public class Player {
         return null;
     }
 
-    public void setDecision(String decision) {
+    public void setDecision(String decision){
         decisionQueue.offer(decision); // 向队列中添加决策
     }
 
@@ -63,7 +66,7 @@ public class Player {
     public String turnActions(Dealer dealer){
         if (handCards.getSumValue()>21){
             //爆牌结束轮次
-            System.out.println("player boom");
+            //System.out.println("player boom");
             return "boom";
         }
 
@@ -71,19 +74,22 @@ public class Player {
             Card newCard = dealer.getAllCards().dealCard();
             handCards.AddCards(newCard);
 
+            //这里发消息
+            //发送给玩家的消息
+            JSONObject toTarget= Obj2Json.hitRes(this,newCard);
+            channel.writeAndFlush(Result.success(toTarget));
+            //发送给其他玩家的消息
+            JSONObject toOther= Obj2Json.hitResOther(this);
+            GroupMessageHandler.toOthers(toOther,this);
+
             if (handCards.getSumValue()>21){
                 //爆牌结束轮次
                 //System.out.println("player boom");
-                GroupMessageHandler.toGroup("玩家 "+this.pos+" 爆牌，轮次结束");
+                //GroupMessageHandler.toGroup(JSONObject.toJSONString("玩家 "+this.pos+" 爆牌，轮次结束"));
                 return "boom";
             }
-
-            //这里发消息
-            JSONObject obj= Obj2Json.hitRes(this,newCard);
-            GroupMessageHandler.toGroup(obj);
         }
-
-        GroupMessageHandler.toGroup("玩家 "+this.pos+" 轮次结束");
+        //GroupMessageHandler.toGroup(JSONObject.toJSONString("玩家 "+this.pos+" 轮次结束"));
         return "notBoom";
     }
 }

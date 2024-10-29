@@ -21,18 +21,16 @@ public class Host {
         while (getDecision().equals("hit")){
             Card newCard = dealer.getAllCards().dealCard();
             handCards.AddCards(newCard);
-            if (handCards.getSumValue()>21){
-                //爆牌结束轮次
-//                System.out.println("庄家爆牌出局");
-                GroupMessageHandler.toGroup("庄家爆牌，轮次结束");
-                return "boom";
-            }
+
             //这里发消息
             JSONObject obj= Obj2Json.hitRes(this,newCard);
             GroupMessageHandler.toGroup(obj);
         }
+        if (handCards.getSumValue()>21){
+            //爆牌结束轮次
+            return "boom";
+        }
 
-        GroupMessageHandler.toGroup("庄家轮次结束");
         return "notBoom";
     }
 
@@ -40,6 +38,6 @@ public class Host {
         if (handCards.getSumValue()<17){
             return "hit";
         }
-        return "stay";
+        return "stand";
     }
 }

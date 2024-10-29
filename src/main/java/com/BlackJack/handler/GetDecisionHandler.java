@@ -19,7 +19,7 @@ public class GetDecisionHandler extends SimpleChannelInboundHandler<TextWebSocke
         if (json.containsKey("operation")) {
             System.out.println("收到operation");
             String operation = json.getString("operation");
-            if ("hit".equals(operation) || "stay".equals(operation)) {
+            if ("hit".equals(operation) || "stand".equals(operation)) {
                 player.setDecision(operation);
             }
         }

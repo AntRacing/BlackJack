@@ -21,6 +21,13 @@ public class Obj2Json {
 
         return jsonObject;
     }
+    public static JSONObject playerInitMsg(Player player){
+        JSONObject jsonObject = new JSONObject();
+        // 向 JSON 对象中添加键值对
+        jsonObject.put("you", player.getPos());
+
+        return jsonObject;
+    }
 
     public static JSONObject playerTrunMsg(Player player){
         JSONObject jsonObject = new JSONObject();
@@ -38,6 +45,16 @@ public class Obj2Json {
         JSONObject hitRes = card2Json(newCard);
         topObj.put("hitRes",hitRes);
         topObj.put("sumValue",player.getHandCards().getSumValue());
+        topObj.put("isBust",player.getHandCards().getSumValue()>21);
+
+        return  topObj;
+    }
+
+    public static  JSONObject hitResOther(Player player){
+        JSONObject topObj = new JSONObject();
+
+        topObj.put("whoTurn",player.getPos());
+        topObj.put("operation","hit");
         topObj.put("isBust",player.getHandCards().getSumValue()>21);
 
         return  topObj;

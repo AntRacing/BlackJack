@@ -7,7 +7,7 @@ import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 public class Result {
     public static TextWebSocketFrame success(String text){
 
-        return new TextWebSocketFrame(JSON.toJSONString(text));
+        return new TextWebSocketFrame(text);
     }
 
     public static TextWebSocketFrame success(JSONObject obj){
@@ -16,10 +16,10 @@ public class Result {
     }
 
     public static TextWebSocketFrame fail(String text){
-        return new TextWebSocketFrame(JSON.toJSONString("出现异常:"+text));
+        return new TextWebSocketFrame("出现异常:"+text);
     }
 
     public static TextWebSocketFrame answer(String text){
-        return new TextWebSocketFrame("回复:"+JSON.toJSONString(text));
+        return new TextWebSocketFrame("回复:"+text);
     }
 }
