@@ -13,7 +13,7 @@ public class AllCards {
     List<Card> deck;
 
     public AllCards(){
-        List<String> suits = Arrays.asList("Spades", "Hearts", "Diamonds", "Clubs"); // 英文花色
+        List<String> suits = Arrays.asList("spades", "hearts", "diamonds", "clubs"); // 英文花色
         List<String> values = Arrays.asList(
                 "A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"); // 牌面值
 
