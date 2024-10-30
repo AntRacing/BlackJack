@@ -2,8 +2,8 @@ package com.BlackJack.gameParticipant;
 
 import com.BlackJack.gameProps.Card;
 import com.BlackJack.gameProps.HandCards;
-import com.BlackJack.inTools.GroupMessageHandler;
-import com.BlackJack.inTools.Obj2Json;
+import com.BlackJack.toolClass.SendMessage;
+import com.BlackJack.toolClass.Obj2Json;
 import com.alibaba.fastjson2.JSONObject;
 import lombok.Getter;
 
@@ -24,7 +24,7 @@ public class Host {
 
             //这里发消息
             JSONObject obj= Obj2Json.hitRes(this,newCard);
-            GroupMessageHandler.toGroup(obj);
+            SendMessage.toGroup(obj);
         }
         if (handCards.getSumValue()>21){
             //爆牌结束轮次

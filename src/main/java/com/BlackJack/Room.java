@@ -11,7 +11,7 @@ import java.util.List;
 public class Room {
     private final List<Player> players = new ArrayList<>();
 
-    private final int requiredPlayers = 2;//游戏需要的人数
+    private final int requiredPlayers = 1;//游戏需要的人数
 
     private Game game;
 

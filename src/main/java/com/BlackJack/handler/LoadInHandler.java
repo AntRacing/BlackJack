@@ -3,13 +3,12 @@ package com.BlackJack.handler;
 import com.BlackJack.GameServer;
 import com.BlackJack.Room;
 import com.BlackJack.gameParticipant.Player;
-import com.BlackJack.inTools.Result;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
+import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 
 
-
-public class LoadIn extends ChannelInboundHandlerAdapter {
+public class LoadInHandler extends ChannelInboundHandlerAdapter {
 
 
     @Override
@@ -21,7 +20,7 @@ public class LoadIn extends ChannelInboundHandlerAdapter {
             GameServer.room.addPlayer(player);
             System.out.println("newPlayer "+pos+" 加入room");
         } else {
-            ctx.channel().writeAndFlush(Result.fail("房间已满员"));
+            ctx.channel().writeAndFlush(new TextWebSocketFrame("出现异常:房间已满员"));
             ctx.close();
         }
 

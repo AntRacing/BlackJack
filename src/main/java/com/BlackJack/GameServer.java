@@ -1,6 +1,6 @@
 package com.BlackJack;
 
-import com.BlackJack.handler.LoadIn;
+import com.BlackJack.handler.LoadInHandler;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -35,7 +35,7 @@ public class GameServer {
                         //websocket支持
                         pipeline.addLast(new WebSocketServerProtocolHandler("/"));
                         //添加逻辑处理
-                        pipeline.addLast(new LoadIn());
+                        pipeline.addLast(new LoadInHandler());
                     }
                 });
         //绑定端口

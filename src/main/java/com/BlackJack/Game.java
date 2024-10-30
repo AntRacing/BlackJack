@@ -3,9 +3,8 @@ package com.BlackJack;
 import com.BlackJack.gameParticipant.Dealer;
 import com.BlackJack.gameParticipant.Host;
 import com.BlackJack.gameParticipant.Player;
-import com.BlackJack.inTools.GroupMessageHandler;
-import com.BlackJack.inTools.Obj2Json;
-import com.BlackJack.inTools.Result;
+import com.BlackJack.toolClass.SendMessage;
+import com.BlackJack.toolClass.Obj2Json;
 import com.alibaba.fastjson2.JSONObject;
 
 import java.util.List;
@@ -24,15 +23,15 @@ public class Game {
     public void startGame(){
         //轮流单播
         for(Player player:players){
-            player.getChannel().writeAndFlush(Result.success(Obj2Json.playerInitMsg(player)));
+            SendMessage.toTarget(Obj2Json.playerInitMsg(player), player);
         }
 
         //广播 whoTrun ： gameStart
-        GroupMessageHandler.toGroup(Obj2Json.startGameMsg().toJSONString());
+        SendMessage.toGroup(Obj2Json.startGameMsg().toJSONString());
         dealer.firstTurn(players, host);
-        //广播 玩家和庄家的结果(先随便搞一下)
+        //广播 玩家和庄家的结果
         JSONObject obj = Obj2Json.initialTrunJobj(players,host);
-        GroupMessageHandler.toGroup(obj);
+        SendMessage.toGroup(obj);
     }
 
     public void roundTrun(){
@@ -74,7 +73,7 @@ public class Game {
         }
         //广播结果
         JSONObject result = Obj2Json.settleTrunJobj(players, host);
-        GroupMessageHandler.toGroup(result);
+        SendMessage.toGroup(result);
     }
 
 }

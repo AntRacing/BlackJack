@@ -3,12 +3,10 @@ package com.BlackJack.gameParticipant;
 import com.BlackJack.gameProps.Card;
 import com.BlackJack.gameProps.HandCards;
 import com.BlackJack.handler.GetDecisionHandler;
-import com.BlackJack.inTools.GroupMessageHandler;
-import com.BlackJack.inTools.Obj2Json;
-import com.BlackJack.inTools.Result;
+import com.BlackJack.toolClass.SendMessage;
+import com.BlackJack.toolClass.Obj2Json;
 import com.alibaba.fastjson2.JSONObject;
 import io.netty.channel.Channel;
-import io.netty.channel.ChannelFutureListener;
 import lombok.Data;
 
 import java.util.concurrent.BlockingQueue;
@@ -46,7 +44,7 @@ public class Player {
 
         try {
             JSONObject playerTurn = Obj2Json.playerTrunMsg(this);
-            GroupMessageHandler.toGroup(playerTurn);
+            SendMessage.toGroup(playerTurn);
             // 从队列中获取决策
             String operation = decisionQueue.poll(150, TimeUnit.SECONDS);// 设置超时时间
             if(operation!=null){
@@ -81,19 +79,20 @@ public class Player {
             //这里发消息
             //发送给玩家的消息
             JSONObject toTarget= Obj2Json.hitRes(this,newCard);
-            channel.writeAndFlush(Result.success(toTarget));
+            SendMessage.toTarget(toTarget,this);
+            //channel.writeAndFlush(Result.success(toTarget));
             //发送给其他玩家的消息
-            JSONObject toOther= Obj2Json.hitResOther(this);
-            GroupMessageHandler.toOthers(toOther,this);
+            JSONObject toOthers= Obj2Json.hitResOther(this);
+            SendMessage.toOthers(toOthers,this);
 
             if (handCards.getSumValue()>21){
                 //爆牌结束轮次
                 //System.out.println("player boom");
-                //GroupMessageHandler.toGroup(JSONObject.toJSONString("玩家 "+this.pos+" 爆牌，轮次结束"));
+                //SendMessage.toGroup(JSONObject.toJSONString("玩家 "+this.pos+" 爆牌，轮次结束"));
                 return "boom";
             }
         }
-        //GroupMessageHandler.toGroup(JSONObject.toJSONString("玩家 "+this.pos+" 轮次结束"));
+        //SendMessage.toGroup(JSONObject.toJSONString("玩家 "+this.pos+" 轮次结束"));
         return "notBoom";
     }
 }

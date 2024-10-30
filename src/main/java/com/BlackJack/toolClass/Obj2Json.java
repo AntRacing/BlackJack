@@ -1,4 +1,4 @@
-package com.BlackJack.inTools;
+package com.BlackJack.toolClass;
 
 import com.BlackJack.gameParticipant.Host;
 import com.BlackJack.gameParticipant.Player;
