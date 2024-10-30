@@ -70,11 +70,18 @@ public class Game {
                 System.out.println(player.getPos()+ " lose");
                 player.setResult("lose");
             }
-            player.restart();
         }
         //广播结果
         JSONObject result = Obj2Json.settleTrunJobj(players, host);
         SendMessage.toGroup(result);
+
+
+    }
+
+    public void restartGame(){
+        for( Player player : players ){
+            player.restart();
+        }
     }
 
 }

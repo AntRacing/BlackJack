@@ -20,6 +20,7 @@ public class Room {
         game.startGame();
         game.roundTrun();
         game.settleGame();
+        //game.restartGame();
     }
 
 
