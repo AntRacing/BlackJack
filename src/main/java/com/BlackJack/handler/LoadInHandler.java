@@ -31,7 +31,8 @@ public class LoadInHandler extends ChannelInboundHandlerAdapter {
     public void channelUnregistered(ChannelHandlerContext ctx) throws Exception {
         Room room = GameServer.room;
         Player player = room.findPlayer(ctx.channel());
-        if (!room.allReady() && player != null) {
+        //if (!room.allReady() && player != null) {
+        if (player != null) {
             room.removePlayer(player);
             System.out.println("Player " + player.getPos() + " 离开room");
         }

@@ -49,11 +49,12 @@ public class GameServer {
                     System.out.println("Waiting for players to be ready...");
                     room.getReadyLatch().await(); // 阻塞直到计数器为零
                 }
+                room.startGame();//开始游戏
+                Thread.currentThread().sleep(3000);
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
                 throw new RuntimeException("Interrupted while waiting for players to be ready.", e);
             }
-            room.startGame();
         }
 
 //            Game game = new Game(room.getPlayers());

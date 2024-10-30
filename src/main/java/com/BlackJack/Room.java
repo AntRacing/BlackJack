@@ -15,6 +15,8 @@ public class Room {
 
     private Game game;
 
+    private  CountDownLatch readyLatch = new CountDownLatch(requiredPlayers);
+
     public void startGame(){
         game = new Game(players);
         game.startGame();
@@ -22,10 +24,6 @@ public class Room {
         game.settleGame();
         //game.restartGame();
     }
-
-
-    @Getter
-    private final CountDownLatch readyLatch = new CountDownLatch(requiredPlayers);
 
     public synchronized void addPlayer(Player player) {
         if (player != null && !players.contains(player)) {
@@ -42,6 +40,7 @@ public class Room {
     public synchronized void removePlayer(Player player) {
         if (players.remove(player)) {
             // 如果需要重新设置计数器，可以在这里重置readyLatch
+            readyLatch= new CountDownLatch(requiredPlayers);
             notifyAll(); // 唤醒等待的线程
         }
     }
