@@ -12,7 +12,7 @@ public class SendMessage {
 
     public static void toGroup(String msg) {
         try {
-            Thread.currentThread().sleep(3000);
+            //Thread.currentThread().sleep(3000);
             for (Player player : room.getPlayers()) {
                 player.getChannel().writeAndFlush(toFrame(msg));
             }
@@ -24,7 +24,7 @@ public class SendMessage {
 
     public static void toGroup(JSONObject obj){
         try {
-            Thread.currentThread().sleep(3000);
+            //Thread.currentThread().sleep(3000);
             for (Player player : room.getPlayers()) {
                 player.getChannel().writeAndFlush(toFrame(obj));
             }
@@ -35,7 +35,7 @@ public class SendMessage {
 
     public static void toTarget(String msg, Player target){
         try {
-            Thread.currentThread().sleep(3000);
+            //Thread.currentThread().sleep(3000);
             for (Player player : room.getPlayers()) {
                 if(player.equals(target)){
                     player.getChannel().writeAndFlush(toFrame(msg));
@@ -49,7 +49,7 @@ public class SendMessage {
 
     public static void toTarget(JSONObject obj, Player target){
         try {
-            Thread.currentThread().sleep(3000);
+            //Thread.currentThread().sleep(3000);
             for (Player player : room.getPlayers()) {
                 if(player.equals(target)){
                     player.getChannel().writeAndFlush(toFrame(obj));

@@ -7,6 +7,8 @@ import com.BlackJack.toolClass.Obj2Json;
 import com.alibaba.fastjson2.JSONObject;
 import lombok.Getter;
 
+import static com.BlackJack.GameServer.room;
+
 
 @Getter
 public class Host {
@@ -35,8 +37,15 @@ public class Host {
     }
 
     private String getDecision () {
-        if (handCards.getSumValue()<17){
-            return "hit";
+        try {
+                Thread.currentThread().sleep(3000);
+                if (handCards.getSumValue()<17){
+                    return "hit";
+                }
+                return "stand";
+
+        }catch (Exception e){
+            System.out.println("等待出错");
         }
         return "stand";
     }
