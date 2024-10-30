@@ -19,6 +19,10 @@ public class HandCards {
         handCards.add(card);
         sumValue=getTotalValue();
     }
+    // 清空所有的卡片
+    public void clear() {
+        handCards.clear();
+    }
 
     private int getTotalValue() {
         int total = 0;

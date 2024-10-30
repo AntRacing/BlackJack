@@ -42,17 +42,20 @@ public class GameServer {
         ChannelFuture future = bootstrap.bind(8080);
 
         // 阻塞主线程，直到所有玩家准备好
-        try {
-            if (!room.allReady()) {
-                System.out.println("Waiting for players to be ready...");
-                room.getReadyLatch().await(); // 阻塞直到计数器为零
+
+        while (true){
+            try {
+                if (!room.allReady()) {
+                    System.out.println("Waiting for players to be ready...");
+                    room.getReadyLatch().await(); // 阻塞直到计数器为零
+                }
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                throw new RuntimeException("Interrupted while waiting for players to be ready.", e);
             }
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-            throw new RuntimeException("Interrupted while waiting for players to be ready.", e);
+            room.startGame();
         }
 
-        room.startGame();
 //            Game game = new Game(room.getPlayers());
 //            game.startGame();
 //            game.roundTrun();
@@ -60,7 +63,7 @@ public class GameServer {
 
 
         // 关闭EventLoopGroup
-        boss.shutdownGracefully();
-        worker.shutdownGracefully();
+//        boss.shutdownGracefully();
+//        worker.shutdownGracefully();
     }
 }

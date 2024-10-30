@@ -13,9 +13,10 @@ public class Dealer {
 
     public void firstTurn(List<Player> players, Host host){
         for(Player player : players ){
-            Card newcard = allCards.dealCard();
-            newcard.setUp(false);
-            player.getHandCards().AddCards(newcard);//第一张牌反面朝下
+            //Card newcard = allCards.dealCard();
+            //newcard.setUp(false);
+            //player.getHandCards().AddCards(newcard);//第一张牌反面朝下
+            player.getHandCards().AddCards(allCards.dealCard());
             player.getHandCards().AddCards(allCards.dealCard());
         }
         //给庄家发

@@ -22,6 +22,7 @@ public class Room {
         game.settleGame();
     }
 
+
     @Getter
     private final CountDownLatch readyLatch = new CountDownLatch(requiredPlayers);
 

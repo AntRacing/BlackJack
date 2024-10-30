@@ -28,6 +28,11 @@ public class Player {
         channel.pipeline().addLast(new GetDecisionHandler(this));
     }
 
+    public void restart(){
+        handCards.clear();
+        result=null;
+    }
+
 //    public String getDecision(){
 //        //发送消息 收到的结果是“hit”或者“stay”
 //        return "stay";//测试就先让它无脑停牌
