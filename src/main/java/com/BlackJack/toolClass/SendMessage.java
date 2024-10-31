@@ -36,12 +36,7 @@ public class SendMessage {
     public static void toTarget(String msg, Player target){
         try {
             //Thread.currentThread().sleep(3000);
-            for (Player player : room.getPlayers()) {
-                if(player.equals(target)){
-                    player.getChannel().writeAndFlush(toFrame(msg));
-                    return;
-                }
-            }
+            target.getChannel().writeAndFlush(toFrame(msg));
         }catch (Exception e){
             System.out.println("等待出错");
         }
@@ -50,18 +45,12 @@ public class SendMessage {
     public static void toTarget(JSONObject obj, Player target){
         try {
             //Thread.currentThread().sleep(3000);
-            for (Player player : room.getPlayers()) {
-                if(player.equals(target)){
-                    player.getChannel().writeAndFlush(toFrame(obj));
-                    return;
-                }
-            }
+            target.getChannel().writeAndFlush(toFrame(obj));
         }catch (Exception e){
             System.out.println("等待出错");
         }
 
     }
-
 
     public static void toOthers(String msg, Player target){
         for (Player player : room.getPlayers()) {

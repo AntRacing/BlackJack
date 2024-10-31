@@ -7,6 +7,7 @@ import com.BlackJack.toolClass.SendMessage;
 import com.BlackJack.toolClass.Obj2Json;
 import com.alibaba.fastjson2.JSONObject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Game {
@@ -20,6 +21,13 @@ public class Game {
         host = new Host();
     }
 
+    public Game(Player player){
+        players = new ArrayList<>();
+        players.add(player);
+        dealer = new Dealer();
+        host = new Host();
+    }
+
     public void startGame(){
         //轮流单播
         for(Player player:players){
@@ -27,11 +35,11 @@ public class Game {
         }
 
         //广播 whoTrun ： gameStart
-        SendMessage.toGroup(Obj2Json.startGameMsg().toJSONString());
+        SendMessage.toTarget(Obj2Json.startGameMsg(),players.get(0));
         dealer.firstTurn(players, host);
         //广播 玩家和庄家的首轮结果
-        JSONObject obj = Obj2Json.initialTrunJobj(players,host);
-        SendMessage.toGroup(obj);
+        JSONObject obj = Obj2Json.initialTrunJobj(players, host);
+        SendMessage.toTarget(obj, players.get(0));
     }
 
     public void roundTrun(){
@@ -46,11 +54,15 @@ public class Game {
             }
         }
         //庄家行动
-        host.turnActions(dealer);
+        host.turnActions(dealer,players.get(0));
         System.out.println("庄家行动结束");
     }
 
     public void settleGame(){
+        try {//等待
+            Thread.currentThread().sleep(3000);
+        }catch (Exception e){}
+
         Boolean hostBoom = host.getHandCards().getSumValue()>21;
         for( Player player : players ){
             if(player.getHandCards().getSumValue() > 21){
@@ -74,8 +86,7 @@ public class Game {
         }
         //广播结果
         JSONObject result = Obj2Json.settleTrunJobj(players, host);
-        SendMessage.toGroup(result);
-
+        SendMessage.toTarget(result,players.get(0));
 
     }
 

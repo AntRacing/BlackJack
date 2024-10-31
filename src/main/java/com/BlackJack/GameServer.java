@@ -11,9 +11,18 @@ import io.netty.handler.codec.http.HttpServerCodec;
 import io.netty.handler.codec.http.websocketx.WebSocketServerProtocolHandler;
 import io.netty.handler.stream.ChunkedWriteHandler;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.LinkedBlockingQueue;
+
 public class GameServer {
     public static final Room room = new Room();//新建游戏室
-
+    //public static List<Game> games = new ArrayList<>();
+    public static BlockingQueue<Game> games = new LinkedBlockingQueue<>();
+    private static ExecutorService gameExecutor = Executors.newFixedThreadPool(10);
     public static void start(){
         EventLoopGroup boss = new NioEventLoopGroup();
         EventLoopGroup worker = new NioEventLoopGroup();
@@ -41,21 +50,47 @@ public class GameServer {
         //绑定端口
         ChannelFuture future = bootstrap.bind(8080);
 
+//        while (true){
+//            try {
+//                Game game = games.take();
+//                game.startGame();
+//                game.roundTrun();
+//                game.settleGame();
+//            }catch (Exception e){
+//            }
+//        }
+        // 提交任务到线程池
+        gameExecutor.submit(() -> {
+            while (true) {
+                try {
+                    Game game = games.take();
+                    gameExecutor.submit(() -> {
+                        game.startGame();
+                        game.roundTrun();
+                        game.settleGame();
+                    });
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                    break;
+                }
+            }
+        });
+
         // 阻塞主线程，直到所有玩家准备好
 
-        while (true){
-            try {
-                if (!room.allReady()) {
-                    System.out.println("Waiting for players to be ready...");
-                    room.getReadyLatch().await(); // 阻塞直到计数器为零
-                }
-                room.startGame();//开始游戏
-                Thread.currentThread().sleep(3000);
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-                throw new RuntimeException("Interrupted while waiting for players to be ready.", e);
-            }
-        }
+//        while (true){
+//            try {
+//                if (!room.allReady()) {
+//                    System.out.println("Waiting for players to be ready...");
+//                    room.getReadyLatch().await(); // 阻塞直到计数器为零
+//                }
+//                room.startGame();//开始游戏
+//                Thread.currentThread().sleep(3000);
+//            } catch (InterruptedException e) {
+//                Thread.currentThread().interrupt();
+//                throw new RuntimeException("Interrupted while waiting for players to be ready.", e);
+//            }
+//        }
 
 //            Game game = new Game(room.getPlayers());
 //            game.startGame();

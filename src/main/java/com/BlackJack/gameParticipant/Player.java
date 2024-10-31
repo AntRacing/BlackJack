@@ -39,9 +39,10 @@ public class Player {
         // 请求客户端决策，并等待响应
         try {
             JSONObject playerTurn = Obj2Json.playerTrunMsg(pos);
-            SendMessage.toGroup(playerTurn);
+            //SendMessage.toGroup(playerTurn);
+            SendMessage.toTarget(playerTurn,this);
             // 从队列中获取决策
-            String operation = decisionQueue.poll(150, TimeUnit.SECONDS);// 设置超时时间
+            String operation = decisionQueue.poll(50, TimeUnit.SECONDS);// 设置超时时间
             if(operation!=null){
                 return operation;
             }else {
@@ -87,8 +88,8 @@ public class Player {
             }
         }
         //停牌后向所有人发送stand
-        JSONObject toAll = Obj2Json.standRes(pos);
-        SendMessage.toGroup(toAll);
+        JSONObject toTarget = Obj2Json.standRes(pos);
+        SendMessage.toTarget(toTarget,this);
         //SendMessage.toGroup(JSONObject.toJSONString("玩家 "+this.pos+" 轮次结束"));
         return "notBoom";
     }
