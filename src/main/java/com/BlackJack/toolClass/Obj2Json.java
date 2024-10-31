@@ -82,14 +82,13 @@ public class Obj2Json {
     }
 
 
-    public static JSONObject initialTrunJobj(List<Player> players, Host host){
+    public static JSONObject initialTrunJobj(Player player, Host host){
         JSONObject topObj = new JSONObject();
         JSONObject initCards = new JSONObject();
-        for(Player player : players){
-            JSONObject playerObj = new JSONObject();
-            playerObj = player2Jobj(player);
-            initCards.put(player.getPos(),playerObj);
-        }
+
+        JSONObject playerObj = player2Jobj(player);
+        initCards.put(player.getPos(),playerObj);
+
         initCards.put("host", host2Jobj(host));
 
         topObj.put("whoTurn","initCards");
@@ -97,14 +96,14 @@ public class Obj2Json {
         return topObj;
     }
 
-    public static JSONObject settleTrunJobj(List<Player> players, Host host){
+    public static JSONObject settleTrunJobj(Player player, Host host){
         JSONObject topObj = new JSONObject();
         JSONObject gameResult = new JSONObject();
-        for(Player player : players){
-            JSONObject playerObj = player2Jobj(player);
-            playerObj.put("result",player.getResult());
-            gameResult.put(player.getPos(),playerObj);
-        }
+
+        JSONObject playerObj = player2Jobj(player);
+        playerObj.put("result",player.getResult());
+        gameResult.put(player.getPos(),playerObj);
+
         gameResult.put("host", host2Jobj(host));
 
         topObj.put("whoTurn","settle");

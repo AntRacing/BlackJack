@@ -28,18 +28,11 @@ public class Player {
         channel.pipeline().addLast(new GetDecisionHandler(this));
     }
 
-    public void restart(){
-        handCards.clear();
-        result=null;
-    }
-
 
     private String getDecision() {
-
         // 请求客户端决策，并等待响应
         try {
             JSONObject playerTurn = Obj2Json.playerTrunMsg(pos);
-            //SendMessage.toGroup(playerTurn);
             SendMessage.toTarget(playerTurn,this);
             // 从队列中获取决策
             String operation = decisionQueue.poll(50, TimeUnit.SECONDS);// 设置超时时间
@@ -63,7 +56,6 @@ public class Player {
     public String turnActions(Dealer dealer){
         if (handCards.getSumValue()>21){
             //爆牌结束轮次
-            //System.out.println("player boom");
             return "boom";
         }
 
@@ -75,22 +67,15 @@ public class Player {
             //发送给玩家的消息
             JSONObject toTarget= Obj2Json.hitRes(this,newCard);
             SendMessage.toTarget(toTarget,this);
-            //channel.writeAndFlush(Result.success(toTarget));
-            //发送给其他玩家的消息
-            JSONObject toOthers= Obj2Json.hitResOther(this);
-            SendMessage.toOthers(toOthers,this);
 
             if (handCards.getSumValue()>21){
                 //爆牌结束轮次
-                //System.out.println("player boom");
-                //SendMessage.toGroup(JSONObject.toJSONString("玩家 "+this.pos+" 爆牌，轮次结束"));
                 return "boom";
             }
         }
-        //停牌后向所有人发送stand
+        //停牌后向所前端发送stand
         JSONObject toTarget = Obj2Json.standRes(pos);
         SendMessage.toTarget(toTarget,this);
-        //SendMessage.toGroup(JSONObject.toJSONString("玩家 "+this.pos+" 轮次结束"));
         return "notBoom";
     }
 }

@@ -19,10 +19,9 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
 
 public class GameServer {
-    public static final Room room = new Room();//新建游戏室
-    //public static List<Game> games = new ArrayList<>();
+
     public static BlockingQueue<Game> games = new LinkedBlockingQueue<>();
-    private static ExecutorService gameExecutor = Executors.newFixedThreadPool(10);
+    private static ExecutorService gameExecutor = Executors.newFixedThreadPool(10);//线程池
     public static void start(){
         EventLoopGroup boss = new NioEventLoopGroup();
         EventLoopGroup worker = new NioEventLoopGroup();
@@ -50,15 +49,6 @@ public class GameServer {
         //绑定端口
         ChannelFuture future = bootstrap.bind(8080);
 
-//        while (true){
-//            try {
-//                Game game = games.take();
-//                game.startGame();
-//                game.roundTrun();
-//                game.settleGame();
-//            }catch (Exception e){
-//            }
-//        }
         // 提交任务到线程池
         gameExecutor.submit(() -> {
             while (true) {
@@ -75,28 +65,6 @@ public class GameServer {
                 }
             }
         });
-
-        // 阻塞主线程，直到所有玩家准备好
-
-//        while (true){
-//            try {
-//                if (!room.allReady()) {
-//                    System.out.println("Waiting for players to be ready...");
-//                    room.getReadyLatch().await(); // 阻塞直到计数器为零
-//                }
-//                room.startGame();//开始游戏
-//                Thread.currentThread().sleep(3000);
-//            } catch (InterruptedException e) {
-//                Thread.currentThread().interrupt();
-//                throw new RuntimeException("Interrupted while waiting for players to be ready.", e);
-//            }
-//        }
-
-//            Game game = new Game(room.getPlayers());
-//            game.startGame();
-//            game.roundTrun();
-//            game.settleGame();
-
 
         // 关闭EventLoopGroup
 //        boss.shutdownGracefully();
