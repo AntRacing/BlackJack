@@ -33,22 +33,12 @@ public class Player {
         result=null;
     }
 
-//    public String getDecision(){
-//        //发送消息 收到的结果是“hit”或者“stay”
-//        return "stay";//测试就先让它无脑停牌
-//    }
-    public String getDecision() {
+
+    private String getDecision() {
 
         // 请求客户端决策，并等待响应
-//        channel.writeAndFlush(Result.success(playerTurn)).addListener((ChannelFutureListener) future -> {
-//            if (!future.isSuccess()) {
-//                System.err.println("Failed to send the request to the client.");
-//                System.err.println(future.cause().getMessage()); // 输出异常信息
-//            }
-//        });
-
         try {
-            JSONObject playerTurn = Obj2Json.playerTrunMsg(this);
+            JSONObject playerTurn = Obj2Json.playerTrunMsg(pos);
             SendMessage.toGroup(playerTurn);
             // 从队列中获取决策
             String operation = decisionQueue.poll(150, TimeUnit.SECONDS);// 设置超时时间
@@ -64,11 +54,10 @@ public class Player {
         return null;
     }
 
+
     public void setDecision(String decision){
         decisionQueue.offer(decision); // 向队列中添加决策
     }
-
-
 
     public String turnActions(Dealer dealer){
         if (handCards.getSumValue()>21){
@@ -97,6 +86,9 @@ public class Player {
                 return "boom";
             }
         }
+        //停牌后向所有人发送stand
+        JSONObject toAll = Obj2Json.standRes(pos);
+        SendMessage.toGroup(toAll);
         //SendMessage.toGroup(JSONObject.toJSONString("玩家 "+this.pos+" 轮次结束"));
         return "notBoom";
     }

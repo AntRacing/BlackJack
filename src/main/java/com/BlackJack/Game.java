@@ -29,7 +29,7 @@ public class Game {
         //广播 whoTrun ： gameStart
         SendMessage.toGroup(Obj2Json.startGameMsg().toJSONString());
         dealer.firstTurn(players, host);
-        //广播 玩家和庄家的结果
+        //广播 玩家和庄家的首轮结果
         JSONObject obj = Obj2Json.initialTrunJobj(players,host);
         SendMessage.toGroup(obj);
     }
@@ -38,10 +38,11 @@ public class Game {
         for( Player player : players ){
             //玩家轮流行动
             String result = player.turnActions(dealer);
-            System.out.println("玩家"+player.getPos()+"行动结束");
             if( result.equals("boom") ){
                 //这里可能涉及到一些筹码计算
                 System.out.println("玩家"+player.getPos()+"爆牌出局");
+            }else {
+                System.out.println("玩家"+player.getPos()+"行动结束");
             }
         }
         //庄家行动

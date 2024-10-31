@@ -29,10 +29,10 @@ public class Obj2Json {
         return jsonObject;
     }
 
-    public static JSONObject playerTrunMsg(Player player){
+    public static JSONObject playerTrunMsg(String pos){
         JSONObject jsonObject = new JSONObject();
         // 向 JSON 对象中添加键值对
-        jsonObject.put("whoTurn", player.getPos());
+        jsonObject.put("whoTurn", pos);
 
         return jsonObject;
     }
@@ -47,6 +47,14 @@ public class Obj2Json {
         topObj.put("sumValue",player.getHandCards().getSumValue());
         topObj.put("isBust",player.getHandCards().getSumValue()>21);
 
+        return  topObj;
+    }
+
+    //{whoTurn: 'xxx', operation: 'stand'}
+    public static  JSONObject standRes(String pos){
+        JSONObject topObj = new JSONObject();
+        topObj.put("whoTurn",pos);
+        topObj.put("operation","stand");
         return  topObj;
     }
 

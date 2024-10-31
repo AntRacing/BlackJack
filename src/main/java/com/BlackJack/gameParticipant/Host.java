@@ -20,6 +20,9 @@ public class Host {
             return "boom";
         }
 
+        JSONObject playerTurn = Obj2Json.playerTrunMsg("host");
+        SendMessage.toGroup(playerTurn);
+
         while (getDecision().equals("hit")){
             Card newCard = dealer.getAllCards().dealCard();
             handCards.AddCards(newCard);
@@ -27,11 +30,15 @@ public class Host {
             //这里发消息
             JSONObject obj= Obj2Json.hitRes(this,newCard);
             SendMessage.toGroup(obj);
+
+            if (handCards.getSumValue()>21){
+                //爆牌结束轮次
+                return "boom";
+            }
         }
-        if (handCards.getSumValue()>21){
-            //爆牌结束轮次
-            return "boom";
-        }
+
+        JSONObject toAll = Obj2Json.standRes("host");
+        SendMessage.toGroup(toAll);
 
         return "notBoom";
     }
