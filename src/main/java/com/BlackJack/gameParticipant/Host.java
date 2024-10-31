@@ -45,7 +45,7 @@ public class Host {
 
     private String getDecision () {
         try {
-                Thread.currentThread().sleep(3000);
+                Thread.currentThread().sleep(1500);
                 if (handCards.getSumValue()<17){
                     return "hit";
                 }

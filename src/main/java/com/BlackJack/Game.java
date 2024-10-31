@@ -60,7 +60,7 @@ public class Game {
 
     public void settleGame(){
         try {//等待
-            Thread.currentThread().sleep(3000);
+            Thread.currentThread().sleep(1500);
         }catch (Exception e){}
 
         Boolean hostBoom = host.getHandCards().getSumValue()>21;
