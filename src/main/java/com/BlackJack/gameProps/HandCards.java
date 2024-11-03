@@ -17,14 +17,14 @@ public class HandCards {
 
     public void AddCards(Card card){
         handCards.add(card);
-        sumValue=getTotalValue();
+        sumValue=calculateTotalValue();
     }
     // 清空所有的卡片
     public void clear() {
         handCards.clear();
     }
 
-    private int getTotalValue() {
+    private int calculateTotalValue() {
         int total = 0;
         int aces = 0;
         for (Card card : handCards) {

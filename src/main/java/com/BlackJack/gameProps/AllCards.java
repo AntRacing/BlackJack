@@ -30,17 +30,8 @@ public class AllCards {
             }
         }
 
-        shuffleDeck();
+        Collections.shuffle(deck);//洗牌
     }
-
-
-    /**
-     * 洗牌方法
-     */
-    private void shuffleDeck() {
-        Collections.shuffle(deck);
-    }
-
 
 
 }
