@@ -24,7 +24,7 @@ public class Host {
         SendMessage.toTarget(playerTurn,target);
 
         while (getDecision().equals("hit")){
-            Card newCard = dealer.getAllCards().dealCard();
+            Card newCard = dealer.dealCard();
             handCards.AddCards(newCard);
 
             //这里发消息

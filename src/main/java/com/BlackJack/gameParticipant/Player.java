@@ -60,7 +60,7 @@ public class Player {
         }
 
         while (getDecision().equals("hit")){
-            Card newCard = dealer.getAllCards().dealCard();
+            Card newCard = dealer.dealCard();
             handCards.AddCards(newCard);
 
             //这里发消息

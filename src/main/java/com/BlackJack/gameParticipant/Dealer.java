@@ -13,13 +13,28 @@ public class Dealer {
 
     public void firstTurn(Player player, Host host){
         //给玩家发牌
-        player.getHandCards().AddCards(allCards.dealCard());
-        player.getHandCards().AddCards(allCards.dealCard());
+        player.getHandCards().AddCards(dealCard());
+        player.getHandCards().AddCards(dealCard());
 
         //给庄家发
-        Card newcard = allCards.dealCard();
+        Card newcard = dealCard();
         newcard.setUp(false);
         host.getHandCards().AddCards(newcard);//第一张牌反面朝下
-        host.getHandCards().AddCards(allCards.dealCard());
+        host.getHandCards().AddCards(dealCard());
+    }
+
+
+    /**
+     * 发牌方法，从牌堆中随机抽取一张牌并移除
+     * @return 抽取的牌
+     */
+    public Card dealCard() {
+        List<Card> deck = allCards.getDeck();
+        if (deck.isEmpty()) {
+            allCards.createAllCards();
+            //throw new IllegalStateException("No more cards in the deck!");
+        }
+        // 移除并返回第一张牌
+        return deck.removeFirst();
     }
 }
